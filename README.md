@@ -140,11 +140,25 @@ python3 vlc_control.py
 
 
 
-xychart-beta
-    title "Gesture Accuracy: Target vs. Achieved (%)"
-    x-axis ["Required Target", "Achieved by Our System"]
-    y-axis "Accuracy %" 80 --> 100
-    bar [90, 95.4]
+=========================================================
+ 🎯 TARGET VS. ACHIEVED: PERFORMANCE METRICS
+=========================================================
+
+1. GESTURE ACCURACY (Higher is better)
+Required Target : ██████████████████░░  >90.0%
+Our Project     : ███████████████████▌   95.4% 🏆
+
+2. SYSTEM LATENCY (Lower is better)
+Maximum Allowed : ████████████████████  <200 ms
+Our Project     : ████████              ~80 ms 🏆
+*(Reduced via Edge Frame Skipping & Zero-Buffer Camera)*
+
+3. PROCESSING SPEED (Higher is better)
+Required Target : ███████████████░░░░░  ≥15 FPS
+Our Project     : ████████████████████   30 FPS 🏆
+*(Stable throughput achieved via Hardware Unthrottling)*
+
+=========================================================
 ## 📺 Project Demo
 
 Check out the system in action by clicking the preview below:

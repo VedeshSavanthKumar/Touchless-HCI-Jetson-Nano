@@ -162,8 +162,9 @@ Our Project     : ████████████████████  
 ## 📺 Project Demo
 
 Check out the system in action by clicking the preview below:
+https://youtu.be/P46tSpa8ddY
 
-> **Note:** Replace `YOUR_VIDEO_ID` in the link and image URL above with the actual ID from your YouTube URL.
+
 
 ---
 

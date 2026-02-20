@@ -18,7 +18,8 @@ An optimized, real-time Human-Computer Interaction (HCI) system built specifical
 7. [Workflow: Data to Inference](#workflow-data-to-inference)
 8. [Edge Computing Optimizations](#edge-computing-optimizations)
 9. [Project Demo Video](#project-demo-video)
----
+
+--
 
 ## 📝 Project Overview
 

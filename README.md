@@ -144,13 +144,4 @@ Check out the system in action by clicking the preview below:
 
 ---
 
-```
 
-### Summary of Fixes:
-1.  **HTML Anchors:** I added `<a name="label"></a>` before each section. In the Table of Contents, the links like `(#performance-metrics)` now point exactly to those tags, which is the most reliable way to handle Markdown navigation.
-2.  **Clean Separation:** Each section is clearly divided by horizontal rules (`---`) for better readability.
-3.  **Copy-Paste Ready:** All shell commands are in individual, clean code blocks.
-
-**Would you like me to help you create the `record_data.py` script to start building your gesture dataset?**
-
-```

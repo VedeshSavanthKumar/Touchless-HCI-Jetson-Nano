@@ -44,7 +44,7 @@ This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction
 pip3 install opencv-python mediapipe pandas scikit-learn pyautogui numpy
 
 
-2. Optimize Jetson Hardware
+##2. Optimize Jetson Hardware
 To ensure maximum performance and avoid OOM (Out-of-Memory) terminations, set the Jetson to MAX power mode:
 
 sudo nvpmodel -m 0
@@ -60,3 +60,16 @@ Phase 2: Model Training
 Train the Scikit-Learn SVM classifier. Coordinates are mathematically normalized relative to the wrist (
 ) to ensure the model learns the shape of the gesture rather than its position on the screen.
 python3 train_model.py
+
+Phase 3: Live Edge Inference
+Run the live controller alongside VLC Media Player.
+python3 vlc_control.py
+
+
+Open VLC Player and load an MP4 video.
+Click inside the VLC window to make it active.
+Show your PALM to unlock the security state and begin controlling the media.
+Edge Computing Optimizations
+Edge Frame Skipping: The inference loop processes every 2nd frame, preventing the MediaPipe pipeline from bottlenecking the Jetson's CPU.
+Buffer Bloat Eradication: cv2.CAP_PROP_BUFFERSIZE is hardcoded to 1, preventing OpenCV from queuing old frames and causing latency buildup.
+Memory Management: A 4GB Swapfile was provisioned on the SD card to prevent Linux OOM (Out-of-Memory) crashes during live inference.

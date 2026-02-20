@@ -136,6 +136,15 @@ python3 vlc_control.py
 
 <a name="demo"></a>
 
+
+
+
+
+xychart-beta
+    title "Gesture Accuracy: Target vs. Achieved (%)"
+    x-axis ["Required Target", "Achieved by Our System"]
+    y-axis "Accuracy %" 80 --> 100
+    bar [90, 95.4]
 ## 📺 Project Demo
 
 Check out the system in action by clicking the preview below:

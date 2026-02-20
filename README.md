@@ -1,24 +1,43 @@
+This is a revamped, professional `README.md` for your project. I’ve restructured it into logical sections, cleaned up the code blocks for easy "one-click" copying, and added the navigation and demo placeholders you requested.
+
+---
+
 # 🖐️ Touchless HCI for Media Control on NVIDIA Jetson Nano
 
-An optimized, real-time Human-Computer Interaction (HCI) system built specifically for the **NVIDIA Jetson Nano Developer Kit**. This project translates real-time hand gestures into system-level media control commands for VLC Media Player, achieving **>95% accuracy** and **sub-100ms latency** on edge hardware.
+An optimized, real-time Human-Computer Interaction (HCI) system built specifically for the **NVIDIA Jetson Nano**. This project translates hand gestures into system-level media commands for VLC, achieving **>95% accuracy** and **sub-100ms latency** on edge hardware.
+
+---
+
+## 📌 Table of Contents
+
+1. [Project Overview](https://www.google.com/search?q=%23-project-overview)
+2. [Key Performance Metrics](https://www.google.com/search?q=%23-key-performance-metrics)
+3. [Gesture Command Map](https://www.google.com/search?q=%23-gesture-command-map)
+4. [Requirements](https://www.google.com/search?q=%23-requirements--software)
+5. [Installation & Setup](https://www.google.com/search?q=%23-installation--setup)
+6. [Hardware Optimization](https://www.google.com/search?q=%23-hardware-optimization)
+7. [Workflow: Data to Inference](https://www.google.com/search?q=%23-workflow-data-to-inference)
+8. [Edge Computing Optimizations](https://www.google.com/search?q=%23-edge-computing-optimizations)
+9. [Project Demo](https://www.google.com/search?q=%23-project-demo)
 
 ---
 
 ## 📝 Project Overview
-This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction and a **Support Vector Machine (SVM)** classifier for robust gesture recognition. It bypasses common edge-computing bottlenecks—such as Out-of-Memory (OOM) crashes and CPU throttling—through strict pipeline optimizations, ensuring high stability for local media control.
+
+This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction and a **Support Vector Machine (SVM)** classifier for robust gesture recognition. It bypasses common edge-computing bottlenecks—such as Out-of-Memory (OOM) crashes and CPU throttling—through strict pipeline optimizations.
 
 ### 🚀 Key Performance Metrics
-*   **Accuracy:** 95.45% (Achieved via relative coordinate normalization to eliminate spatial location bias).
-*   **Latency:** <100ms end-to-end (Achieved via frame skipping and zero-buffer camera configuration).
-*   **Throughput:** Stable at 15-30 FPS on Jetson Nano hardware.
+
+* **Accuracy:** 95.45% (Achieved via relative coordinate normalization).
+* **Latency:** <100ms end-to-end (Achieved via frame skipping).
+* **Throughput:** Stable at 15-30 FPS on Jetson Nano.
 
 ---
 
 ## 🎮 Gesture Command Map
 
-
 | Key | Gesture Name | Mapped Action (VLC) | System Execution |
-| :--- | :--- | :--- | :--- |
+| --- | --- | --- | --- |
 | `1` | **PALM** | UNLOCK / PLAY / PAUSE | `press('space')` |
 | `0` | **FIST** | HARD STOP | `press('s')` |
 | `2` | **PINCH** | VOLUME UP (+) | `press('volumeup')` |
@@ -29,47 +48,94 @@ This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction
 
 ---
 
-## 🛠️ Hardware & Software Requirements
-*   **Hardware:** NVIDIA Jetson Nano Developer Kit (2GB/4GB), USB Webcam
-*   **OS:** JetPack OS with CUDA support (Ubuntu 18.04)
-*   **Software:** Python 3.6, OpenCV, MediaPipe, Scikit-Learn, PyAutoGUI, NumPy
-*   **Media Player:** VLC Media Player (Optimized for H.264 `.mp4` at 480p/720p)
+## 🛠️ Requirements & Software
+
+* **Hardware:** NVIDIA Jetson Nano (2GB/4GB), USB Webcam.
+* **OS:** JetPack OS (Ubuntu 18.04).
+* **Media Player:** VLC Media Player (Optimized for H.264 `.mp4`).
+* **Python Version:** 3.6+
 
 ---
 
 ## ⚙️ Installation & Setup
 
 ### 1. Install Dependencies
+
+Run the following command to install the necessary Python libraries:
+
 ```bash
 pip3 install opencv-python mediapipe pandas scikit-learn pyautogui numpy
 
+```
 
-##2. Optimize Jetson Hardware
-To ensure maximum performance and avoid OOM (Out-of-Memory) terminations, set the Jetson to MAX power mode:
+### 2. Configure VLC
 
+Ensure VLC is installed and set as your default player:
+
+```bash
+sudo apt-get update
+sudo apt-get install vlc
+
+```
+
+---
+
+## ⚡ Hardware Optimization
+
+To ensure maximum performance and avoid OOM (Out-of-Memory) terminations, set the Jetson to **MAX power mode** and enable the fan:
+
+```bash
+# Set to MAX Power Mode
 sudo nvpmodel -m 0
+
+# Enable maximum clock speeds
 sudo jetson_clocks
 
+```
 
-Phase 1: Data Collection
+---
+
+## 🔄 Workflow: Data to Inference
+
+### Phase 1: Data Collection
+
 Collect custom hand landmarks to build your training dataset.
+
+```bash
 python3 record_data.py
 
+```
 
-Phase 2: Model Training
-Train the Scikit-Learn SVM classifier. Coordinates are mathematically normalized relative to the wrist (
-) to ensure the model learns the shape of the gesture rather than its position on the screen.
+### Phase 2: Model Training
+
+Train the Scikit-Learn SVM classifier. Coordinates are mathematically normalized relative to the wrist () to ensure the model learns shape rather than position.
+
+```bash
 python3 train_model.py
 
-Phase 3: Live Edge Inference
-Run the live controller alongside VLC Media Player.
+```
+
+### Phase 3: Live Edge Inference
+
+Run the live controller. Ensure VLC is open and the window is active.
+
+```bash
 python3 vlc_control.py
 
+```
 
-Open VLC Player and load an MP4 video.
-Click inside the VLC window to make it active.
-Show your PALM to unlock the security state and begin controlling the media.
-Edge Computing Optimizations
-Edge Frame Skipping: The inference loop processes every 2nd frame, preventing the MediaPipe pipeline from bottlenecking the Jetson's CPU.
-Buffer Bloat Eradication: cv2.CAP_PROP_BUFFERSIZE is hardcoded to 1, preventing OpenCV from queuing old frames and causing latency buildup.
-Memory Management: A 4GB Swapfile was provisioned on the SD card to prevent Linux OOM (Out-of-Memory) crashes during live inference.
+---
+
+## 🛠️ Edge Computing Optimizations
+
+* **Frame Skipping:** The inference loop processes every 2nd frame, preventing the MediaPipe pipeline from bottlenecking the CPU.
+* **Buffer Management:** `cv2.CAP_PROP_BUFFERSIZE` is hardcoded to **1**, preventing the webcam from queuing old frames and causing "laggy" input.
+* **Memory Management:** We recommend provisioning a **4GB Swapfile** on the SD card to prevent Linux OOM crashes during long sessions.
+
+---
+
+## 📺 Project Demo
+
+Check out the system in action below:
+
+> **Note:** Click the image above to view the full demonstration of the low-latency gesture control.

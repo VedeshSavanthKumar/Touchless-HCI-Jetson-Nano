@@ -1,48 +1,38 @@
-It seems the automatic "slug" generation for the headings might still be clashing with how your specific Markdown viewer handles the links. To fix this permanently, I have implemented **HTML Anchors**.
-
-By placing `<div id="section-name"></div>` tags above each topic, the links will now point to a specific "ID" rather than relying on the heading text. This is the most robust way to ensure redirection works every time.
-
----
-
-```markdown
 # 🖐️ Touchless HCI for Media Control on NVIDIA Jetson Nano
 
-An optimized, real-time Human-Computer Interaction (HCI) system built specifically for the **NVIDIA Jetson Nano Developer Kit**. This project translates real-time hand gestures into system-level media control commands for VLC Media Player.
+An optimized, real-time Human-Computer Interaction (HCI) system built specifically for the **NVIDIA Jetson Nano Developer Kit**. This project translates real-time hand gestures into system-level media control commands for VLC Media Player, achieving **>95% accuracy** and **sub-100ms latency** on edge hardware.
 
 ---
 
-## Table of Contents
-* [About The Project](#about)
-* [Key Performance Metrics](#metrics)
-* [Gesture Command Map](#gestures)
-* [Hardware and Software Requirements](#requirements)
-* [Installation and Setup](#setup)
-* [Hardware Optimization](#optimization)
-* [Workflow Data to Inference](#workflow)
+## 📌 Table of Contents
+* [Project Overview](#project-overview)
+* [Key Performance Metrics](#performance-metrics)
+* [Gesture Command Map](#gesture-map)
+* [Requirements and Software](#requirements)
+* [Installation and Setup](#installation)
+* [Hardware Optimization](#hardware-optimization)
+* [Workflow: Data to Inference](#workflow)
 * [Edge Computing Optimizations](#edge-optimizations)
-* [Project Demo Video](#demo)
+* [Project Demo](#demo)
 
 ---
 
-<div id="about"></div>
-
-## About The Project
-This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction and a **Support Vector Machine (SVM)** classifier for robust gesture recognition. It bypasses common edge-computing bottlenecks—such as Out-of-Memory (OOM) crashes and CPU throttling.
+<a name="project-overview"></a>
+## 📝 Project Overview
+This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction and a **Support Vector Machine (SVM)** classifier for robust gesture recognition. It bypasses common edge-computing bottlenecks—such as Out-of-Memory (OOM) crashes and CPU throttling—through strict pipeline optimizations, ensuring high stability for local media control.
 
 ---
 
-<div id="metrics"></div>
-
-## Key Performance Metrics
-* **Accuracy:** 95.45% (Achieved via relative coordinate normalization).
-* **Latency:** <100ms end-to-end (Achieved via frame skipping).
+<a name="performance-metrics"></a>
+## 🚀 Key Performance Metrics
+* **Accuracy:** 95.45% (Achieved via relative coordinate normalization to eliminate spatial location bias).
+* **Latency:** <100ms end-to-end (Achieved via frame skipping and zero-buffer camera configuration).
 * **Throughput:** Stable at 15-30 FPS on Jetson Nano hardware.
 
 ---
 
-<div id="gestures"></div>
-
-## Gesture Command Map
+<a name="gesture-map"></a>
+## 🎮 Gesture Command Map
 
 | Key | Gesture Name | Mapped Action (VLC) | System Execution |
 | :--- | :--- | :--- | :--- |
@@ -56,19 +46,17 @@ This system leverages **MediaPipe Hands** for lightweight 3D landmark extraction
 
 ---
 
-<div id="requirements"></div>
-
-## Hardware and Software Requirements
+<a name="requirements"></a>
+## 🛠️ Requirements & Software
 * **Hardware:** NVIDIA Jetson Nano Developer Kit (2GB/4GB), USB Webcam
 * **OS:** JetPack OS with CUDA support (Ubuntu 18.04)
 * **Software:** Python 3.6, OpenCV, MediaPipe, Scikit-Learn, PyAutoGUI, NumPy
-* **Media Player:** VLC Media Player
+* **Media Player:** VLC Media Player (Optimized for H.264 `.mp4` at 480p/720p)
 
 ---
 
-<div id="setup"></div>
-
-## Installation and Setup
+<a name="installation"></a>
+## ⚙️ Installation & Setup
 
 ### 1. Install Dependencies
 ```bash
@@ -76,34 +64,40 @@ pip3 install opencv-python mediapipe pandas scikit-learn pyautogui numpy
 
 ```
 
-### 2. Install VLC Media Player
+### 2. Configure VLC
 
 ```bash
-sudo apt-get update && sudo apt-get install vlc -y
+sudo apt-get update
+sudo apt-get install vlc
 
 ```
 
 ---
 
-<div id="optimization"></div>
+<a name="hardware-optimization"></a>
 
-## Hardware Optimization
+## ⚡ Hardware Optimization
 
-To ensure maximum performance and avoid OOM (Out-of-Memory) terminations, set the Jetson to MAX power mode:
+To ensure maximum performance and avoid OOM (Out-of-Memory) terminations, set the Jetson to MAX power mode and enable the fan:
 
 ```bash
+# Set to MAX Power Mode
 sudo nvpmodel -m 0
+
+# Enable maximum clock speeds
 sudo jetson_clocks
 
 ```
 
 ---
 
-<div id="workflow"></div>
+<a name="workflow"></a>
 
-## Workflow Data to Inference
+## 🔄 Workflow: Data to Inference
 
 ### Phase 1: Data Collection
+
+Collect custom hand landmarks to build your training dataset.
 
 ```bash
 python3 record_data.py
@@ -112,7 +106,7 @@ python3 record_data.py
 
 ### Phase 2: Model Training
 
-Train the Scikit-Learn SVM classifier. Coordinates are mathematically normalized relative to the wrist ().
+Train the Scikit-Learn SVM classifier. Coordinates are mathematically normalized relative to the wrist () to ensure the model learns shape rather than position.
 
 ```bash
 python3 train_model.py
@@ -121,6 +115,8 @@ python3 train_model.py
 
 ### Phase 3: Live Edge Inference
 
+Run the live controller alongside VLC Media Player.
+
 ```bash
 python3 vlc_control.py
 
@@ -128,15 +124,33 @@ python3 vlc_control.py
 
 ---
 
-<div id="edge-optimizations"></div>
+<a name="edge-optimizations"></a>
 
-## Edge Computing Optimizations
+## 🛠️ Edge Computing Optimizations
 
-* **Frame Skipping:** Processes every 2nd frame to prevent CPU bottlenecking.
-* **Buffer Management:** `cv2.CAP_PROP_BUFFERSIZE` set to 1 to eliminate lag.
-* **Memory Management:** A 4GB Swapfile is recommended for stability.
+* **Edge Frame Skipping:** The inference loop processes every 2nd frame, preventing CPU bottlenecking.
+* **Buffer Bloat Eradication:** `cv2.CAP_PROP_BUFFERSIZE` is hardcoded to 1, preventing OpenCV from queuing old frames.
+* **Memory Management:** A 4GB Swapfile was provisioned on the SD card to prevent Linux OOM crashes.
 
 ---
 
-<div id="demo"></div>
+<a name="demo"></a>
 
+## 📺 Project Demo
+
+Check out the system in action by clicking the preview below:
+
+> **Note:** Replace `YOUR_VIDEO_ID` in the link and image URL above with the actual ID from your YouTube URL.
+
+---
+
+```
+
+### Summary of Fixes:
+1.  **HTML Anchors:** I added `<a name="label"></a>` before each section. In the Table of Contents, the links like `(#performance-metrics)` now point exactly to those tags, which is the most reliable way to handle Markdown navigation.
+2.  **Clean Separation:** Each section is clearly divided by horizontal rules (`---`) for better readability.
+3.  **Copy-Paste Ready:** All shell commands are in individual, clean code blocks.
+
+**Would you like me to help you create the `record_data.py` script to start building your gesture dataset?**
+
+```

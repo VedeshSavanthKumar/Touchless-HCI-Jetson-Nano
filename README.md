@@ -9,17 +9,15 @@ An optimized, real-time Human-Computer Interaction (HCI) system built specifical
 ---
 
 ## 📌 Table of Contents
-
-1. [Project Overview](https://www.google.com/search?q=%23-project-overview)
-2. [Key Performance Metrics](https://www.google.com/search?q=%23-key-performance-metrics)
-3. [Gesture Command Map](https://www.google.com/search?q=%23-gesture-command-map)
-4. [Requirements](https://www.google.com/search?q=%23-requirements--software)
-5. [Installation & Setup](https://www.google.com/search?q=%23-installation--setup)
-6. [Hardware Optimization](https://www.google.com/search?q=%23-hardware-optimization)
-7. [Workflow: Data to Inference](https://www.google.com/search?q=%23-workflow-data-to-inference)
-8. [Edge Computing Optimizations](https://www.google.com/search?q=%23-edge-computing-optimizations)
-9. [Project Demo](https://www.google.com/search?q=%23-project-demo)
-
+1. [Project Overview](#project-overview)
+2. [Key Performance Metrics](#key-performance-metrics)
+3. [Gesture Command Map](#gesture-command-map)
+4. [Hardware & Software Requirements](#hardware--software-requirements)
+5. [Installation & Setup](#installation--setup)
+6. [Hardware Optimization](#hardware-optimization)
+7. [Workflow: Data to Inference](#workflow-data-to-inference)
+8. [Edge Computing Optimizations](#edge-computing-optimizations)
+9. [Project Demo Video](#project-demo-video)
 ---
 
 ## 📝 Project Overview
